@@ -1,12 +1,27 @@
 package threading;
 
-import threading.Customers.CustomerManager;
-import threading.Customers.GenerateCustomerTask;
-import threading.EvenNumbers.EvenNumberHolder;
-import threading.EvenNumbers.EvenTask;
+import threading.Customers.AddCustomerTask;
+import threading.Customers.CustomersList;
+import threading.Customers.RemoveCustomerTask;
 
 public class Main {
+    //Customer deadlock main
     public static void main(String[] args) {
+        CustomersList customersList = new CustomersList();
+        Thread removeCustomers = new Thread(new RemoveCustomerTask(customersList));
+        removeCustomers.start();
+        System.out.println("Started thread to remove customers");
+
+        for(int i=0; i<2; i++){
+            Thread addCustomers = new Thread(new AddCustomerTask(customersList, i*100));
+            addCustomers.start();
+            System.out.println("Started thread to add customers");
+        }
+    }
+
+
+    //Customer threading main
+    /*public static void main(String[] args) {
         CustomerManager customerManager = new CustomerManager();
         GenerateCustomerTask task = new GenerateCustomerTask(customerManager);
         for(int user = 0; user < 10; user++){
@@ -23,13 +38,15 @@ public class Main {
             customerManager.howManyCustomers();
             customerManager.displayCustomers();
         }
+    }*/
 
-
-        /*EvenNumberHolder evenNumberHolder = new EvenNumberHolder();
+    //EvenNumber main
+    /*public static void main(String[] args) {
+        EvenNumberHolder evenNumberHolder = new EvenNumberHolder();
         EvenTask task = new EvenTask(evenNumberHolder);
 
         for (int i = 0; i < 15; i++) {
             new Thread(task).start();
-        }*/
-    }
+        }
+    }*/
 }

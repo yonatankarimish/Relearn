@@ -11,7 +11,7 @@ public class Main {
     private static final long composite_number = 8650415921358664919L;
 
     public static void main(String[] args){
-        IPrimeCalculator calculator = new RootPrimeCalculator();
+        IPrimeCalculator calculator = new ThreadedPrimeCalculator();
         IPrimeCalculator proxyCalculator = (IPrimeCalculator)PrimeCalculatorProxy.newInstance(calculator);
         System.out.println("Using "+calculator.getClass().getName());
         System.out.println(prime_number + " is "+(proxyCalculator.isPrime(prime_number)? "prime" : "composite"));

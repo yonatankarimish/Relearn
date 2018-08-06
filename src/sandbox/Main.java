@@ -2,58 +2,53 @@ package sandbox;
 
 import trees.Tree;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.*;
 
 /**
  * Created by Yonatan on 21/11/2016.
  */
 public class Main {
     public static void main(String[] args) {
-        String[] collection = {
-                "arirang",
-                "arithmetics",
-                "ariagorn",
-                "aristothnes",
-                "aristotle"
-        };
-        System.out.println(longestCommonPrefix(collection));
-    }
+        try {
+            String directory = "C:/Users/User/Desktop";
+            Set<StandardOpenOption> writeOptions = new HashSet();
+            writeOptions.add(StandardOpenOption.CREATE);
+            writeOptions.add(StandardOpenOption.APPEND);
 
-    private static boolean areIsomorphic(String a, String b){
-        if(a.length()!=b.length())
-            return false;
-        Map<Character, Character> table = new HashMap<Character, Character>();
-        for(int i=0; i<b.length(); i++){
-            char charOfA = a.charAt(i);
-            char charOfB = b.charAt(i);
-            if(table.containsKey(charOfA)) {
-                if (!table.get(charOfA).equals(charOfB)) {
-                    return false;
+            /*ReadableByteChannel downloadChannel = Files.newByteChannel(Paths.get(directory + "/javaTestSource.txt"));
+            SeekableByteChannel writeChannel = Files.newByteChannel(Paths.get(directory + "/javaTestTarget.txt"), writeOptions);
+            ByteBuffer downloadBuffer = ByteBuffer.allocate(1024);
+            ByteBuffer writeBuffer = ByteBuffer.allocate(1024);
+            int bytesRead;
+
+            do {
+                bytesRead = downloadChannel.read(downloadBuffer);
+                downloadBuffer.flip();
+
+                while (downloadBuffer.hasRemaining()) {
+                    writeBuffer.put(downloadBuffer.get());
                 }
-            }
-            else if(table.containsValue(charOfB))
-                return false;
-            table.put(charOfA,charOfB);
-        }
-        return true;
-    }
+                downloadBuffer.clear();
 
-    private static String longestCommonPrefix(String[] array){
-        String control = array[0];
-        for(;control.length()>0; control = control.substring(0,control.length()-1)){
-            for(String current : array){
-                if(current.indexOf(control)!=0)
-                    break;
-                if(array[array.length-1].equals(current))
-                    return control;
-            }
-        }
-        return "{no common prefix}";
-    }
+                writeChannel.write(writeBuffer);
+                writeBuffer.clear();
+            } while (bytesRead != -1);*/
 
-    private static Tree<Integer> invertBinaryTree(Tree<Integer> tree){
-        return tree;
+            FileChannel downloadChannel = FileChannel.open(Paths.get(directory + "/javaTestSource.txt"));
+            FileChannel writeChannel = FileChannel.open(Paths.get(directory + "/javaTestTarget.txt"), writeOptions);
+            downloadChannel.transferTo(0L, downloadChannel.size(), writeChannel);
+            //downloadChannel.transferTo(0L, Long.MAX_VALUE, writeChannel);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
