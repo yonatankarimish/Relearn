@@ -1,30 +1,35 @@
 package threading;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.*;
+import threading.Customers.CustomerManager;
+import threading.Customers.GenerateCustomerTask;
+import threading.EvenNumbers.EvenNumberHolder;
+import threading.EvenNumbers.EvenTask;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Yonatan
- * Date: 27/08/16
- * Time: 23:18
- * To change this template use File | Settings | File Templates.
- */
 public class Main {
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        HashMap<String,String> heaven = new HashMap<String, String>();
-        heaven.put("אראלי מעלה","אדוני אדוננו");
-        heaven.put("בחירי סגולה","אדוני הוא האלוהים");
-        heaven.put("יחידי סגולה","אדוני אלוהינו");
-
-
-        ExecutorService pool = Executors.newCachedThreadPool();
-        for(String chanter : heaven.keySet()){
-            Prayer prayer = new Prayer(heaven.get(chanter));
-            FutureTask future = new FutureTask<String>(prayer);
-            pool.execute(future);
+    public static void main(String[] args) {
+        CustomerManager customerManager = new CustomerManager();
+        GenerateCustomerTask task = new GenerateCustomerTask(customerManager);
+        for(int user = 0; user < 10; user++){
+            new Thread(task).start();
         }
 
+        while(true){
+            try{
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            customerManager.howManyCustomers();
+            customerManager.displayCustomers();
+        }
+
+
+        /*EvenNumberHolder evenNumberHolder = new EvenNumberHolder();
+        EvenTask task = new EvenTask(evenNumberHolder);
+
+        for (int i = 0; i < 15; i++) {
+            new Thread(task).start();
+        }*/
     }
 }
