@@ -3,10 +3,11 @@ package threading;
 import threading.Customers.AddCustomerTask;
 import threading.Customers.CustomersList;
 import threading.Customers.RemoveCustomerTask;
+import threading.Numbers.NumbersTask;
 
 public class Main {
     //Customer deadlock main
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         CustomersList customersList = new CustomersList();
         Thread removeCustomers = new Thread(new RemoveCustomerTask(customersList));
         removeCustomers.start();
@@ -17,7 +18,7 @@ public class Main {
             addCustomers.start();
             System.out.println("Started thread to add customers");
         }
-    }
+    }*/
 
 
     //Customer threading main
@@ -49,4 +50,34 @@ public class Main {
             new Thread(task).start();
         }
     }*/
+
+    //Numbers main
+    public static void main(String[] args) {
+        System.out.println("Starting main method");
+        NumbersTask task = new NumbersTask();
+
+        Thread numberThread1 = new Thread(task);
+        numberThread1.start();
+
+        Thread numberThread2 = new Thread(task);
+        numberThread2.start();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //numberThread1.interrupt();
+        //numberThread2.interrupt();
+
+        try {
+            numberThread1.join();
+            numberThread2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Finished main method");
+    }
 }
