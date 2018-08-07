@@ -5,9 +5,11 @@ import threading.Customers.CustomersList;
 import threading.Customers.RemoveCustomerTask;
 import threading.Numbers.NumbersTask;
 
+import java.util.concurrent.*;
+
 public class Main {
     //Customer deadlock main
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         CustomersList customersList = new CustomersList();
         Thread removeCustomers = new Thread(new RemoveCustomerTask(customersList));
         removeCustomers.start();
@@ -18,7 +20,7 @@ public class Main {
             addCustomers.start();
             System.out.println("Started thread to add customers");
         }
-    }*/
+    }
 
 
     //Customer threading main
@@ -52,32 +54,28 @@ public class Main {
     }*/
 
     //Numbers main
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         System.out.println("Starting main method");
         NumbersTask task = new NumbersTask();
 
-        Thread numberThread1 = new Thread(task);
-        numberThread1.start();
+        ExecutorService pool = Executors.newFixedThreadPool(2);
+        Future<Double> result =  pool.submit(task);
 
-        Thread numberThread2 = new Thread(task);
-        numberThread2.start();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while(!result.isDone()){
+            System.out.println("Still waiting...");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
-        //numberThread1.interrupt();
-        //numberThread2.interrupt();
-
         try {
-            numberThread1.join();
-            numberThread2.join();
-        } catch (InterruptedException e) {
+            System.out.println(result.get());
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
         System.out.println("Finished main method");
-    }
+    }*/
 }
